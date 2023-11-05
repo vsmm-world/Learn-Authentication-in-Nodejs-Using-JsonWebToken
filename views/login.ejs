@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <form>
+   
+        
+        <label for="email">Enter Your Email</label>
+        <input type="email" name="email" id="email" placeholder="Email" required>
+        
+        <label for="password">Enter Password</label>
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        
+        <button type="submit">login</button>
+
+    </form>
+    <script>
+        const form = document.querySelector('form');
+        const email = document.querySelector('#email');
+        const password = document.querySelector('#password');
+        const button = document.querySelector('button');
+        const baseURL = 'http://localhost:3000/';  
+
+        form.addEventListener('submit',async(e)=>{
+            e.preventDefault();
+
+            const res = await fetch(baseURL+'api/auth/login',{
+                method:"POST",
+                headers:{
+                    'content-type':"application/json"
+                },
+                body:JSON.stringify({
+                    email:email.value,
+                    password:password.value,
+                })
+            })
+
+            email.value='';
+            password.value='';
+
+            const data = await res.json();
+            console.log(data);
+        })
+    </script>
+</body>
+</html>
