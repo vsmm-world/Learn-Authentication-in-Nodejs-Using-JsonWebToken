@@ -1,10 +1,11 @@
-const User = require('../models/user')
-const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const jwtSecret = '2b4ec6aa2fc68c1b8b1ae4769e38666ba8a7ac97d306e83ca371925d9933947fad8bcc'
+const bcrypt= require('bcryptjs')
+const admin = require('../models/admin');
+const adminSecret ='b43e899c2fbe799736a25625900faf5e475d4f96b2e33106a14f0e84425c55f0856e62';
 
 
-exports.register = async (req, res, next) => {
+
+exports.AdminRegister = async (req, res, next) => {
     const { name, email, password } = req.body;
 
 
@@ -15,7 +16,7 @@ exports.register = async (req, res, next) => {
     }
 
     bcrypt.hash(password, 10).then(async (hash) => {
-        await User.create({
+        await admin.create({
             name,
             email,
             password: hash,
@@ -23,12 +24,12 @@ exports.register = async (req, res, next) => {
             const maxAge = 3 * 60 * 60;
             const token = jwt.sign(
                 { id: usr._id, email },
-                jwtSecret,
+                adminSecret,
                 {
                     expiresIn: maxAge,
                 }
             );
-            res.cookie("jwt", token, {
+            res.cookie("admn", token, {
                 httpOnly: true,
                 maxAge: maxAge * 1000,
             });
@@ -45,7 +46,8 @@ exports.register = async (req, res, next) => {
     })
 }
 
-exports.login = async (req, res, next) => {
+
+exports.AdminLogin = async (req, res, next) => {
 
     const { email, password } = req.body;
 
@@ -54,7 +56,7 @@ exports.login = async (req, res, next) => {
             message: "Email or Passowrd not Enterd by User"
         })
     }
-    const usr = await User.findOne({ email });
+    const usr = await admin.findOne({ email });
 
     try {
         if (!usr) {
@@ -68,17 +70,17 @@ exports.login = async (req, res, next) => {
                     const maxAge = 3 * 60 * 60;
                     const token = jwt.sign(
                         { id: usr._id, email },
-                        jwtSecret,
+                        adminSecret,
                         {
                             expiresIn: maxAge,
                         }
                     );
-                    res.cookie("jwt", token, {
+                    res.cookie("admn", token, {
                         httpOnly: true,
                         maxAge: maxAge * 1000,
                     })
                     res.status(201).json({
-                        message: "Login successful",
+                        message: "Admin Login successful",
                         usr: usr._id,
                     })
                 } else {
@@ -94,13 +96,13 @@ exports.login = async (req, res, next) => {
     }
 }
 
-exports.usreAuth =(req,res,next)=>{
-    const token = req.cookies.jwt;
+exports.AdminAuth =(req,res,next)=>{
+    const token = req.cookies.admn;
 
     if(token){
-        jwt.verify(token ,jwtSecret,(err,decodedToken)=>{
+        jwt.verify(token ,adminSecret,(err,decodedToken)=>{
             if(err){
-                return res.redirect('/login')
+                return res.redirect('/admnlogin')
 
             }else{
                 next();
@@ -108,6 +110,6 @@ exports.usreAuth =(req,res,next)=>{
         })
     }
     else{
-        return res.status(401).redirect('/login')
+        return res.status(401).redirect('/admnlogin')
     }
 }

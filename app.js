@@ -6,6 +6,7 @@ const user= require('./models/user');
 const ConnectDB = require('./connection/db')
 const cookieParser= require('cookie-parser')
 const {usreAuth} = require('./Auth/Auth')
+const {AdminAuth}=require('./Auth/Admin')
 
 ConnectDB();
 
@@ -13,6 +14,7 @@ app.use(express.static('public'));
 app.use(express.urlencoded({extended:false}))
 app.use(express.json());
 app.use("/api/auth",require('./Auth/Route'))
+
 app.use(cookieParser());
 
 app.set("view engine", "ejs")
@@ -35,3 +37,13 @@ app.get('/login',(req,res)=>{
 app.get('/rv',usreAuth,(req,res)=>{
     res.render("rv")
 })
+app.get('/admin',AdminAuth,(req,res)=>{
+    res.render('admin')
+})
+app.get('/admnlogin',(req,res)=>{
+    res.render('adminSingIn')
+})
+app.get('/admnregister',(req,res)=>{
+    res.render('adminSingUp')
+})
+

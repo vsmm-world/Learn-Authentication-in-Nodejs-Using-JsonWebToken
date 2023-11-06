@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+
+<body>
+    <form>
+        <label for="name">Enter Your Full Name</label>
+        <input type="text" name="name" id="name" placeholder="Name" required>
+        <label for="email">Enter Your Email</label>
+        <input type="email" name="email" id="email" placeholder="Email" required>
+        <label for="password">Enter Password</label>
+        <input type="password" name="password" id="password" placeholder="Password" required>
+        <button type="submit">Sing Up</button>
+    </form>
+
+    <script>
+        const form = document.querySelector('form');
+        const email = document.querySelector('#email');
+        const name = document.querySelector('#name');
+        const password = document.querySelector('#password');
+        const button = document.querySelector('button');
+        const baseURL = 'http://localhost:3000/';
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const res = await fetch(baseURL + 'api/auth/admnregister', {
+                method: "POST",
+                headers: {
+                    'content-type': "application/json"
+                },
+                body: JSON.stringify({
+                    name: name.value,
+                    email: email.value,
+                    password: password.value,
+                })
+            })
+
+                name.value='';
+                email.value='';
+                password.value='';
+
+                const data = await res.json();
+                console.log(data);
+           
+        })
+    </script>
+</body>
+
+</html>
