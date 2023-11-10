@@ -62,7 +62,7 @@ exports.AdminLogin = async (req, res, next) => {
         if (!usr) {
             res.status(401).json({
                 message: "Not Logged in",
-                error: "Usre Not Found"
+                error: "User Not Found"
             })
         } else {
             bcrypt.compare(password, usr.password).then(function (result) {
