@@ -19,9 +19,7 @@ app.use(cookieParser());
 app.set("view engine", "ejs")
 
 app.listen(port,()=>{
-
     console.log("Website is Running on : " + `http://localhost:${port}`);
-
 })
 
 
